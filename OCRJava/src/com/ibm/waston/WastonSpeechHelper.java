@@ -1,6 +1,5 @@
 package com.ibm.waston;
 
-import java.io.File;
 import java.io.InputStream;
 
 import com.ibm.watson.developer_cloud.http.ServiceCall;
