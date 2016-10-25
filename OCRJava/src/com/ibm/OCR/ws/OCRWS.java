@@ -3,6 +3,8 @@ package com.ibm.OCR.ws;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +23,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import com.alibaba.fastjson.JSON;
 import com.ibm.OCR.OCRHelper;
+import com.ibm.waston.WastonSpeechHelper;
 
 @Path("/secure/ocr")
 public class OCRWS {
@@ -35,7 +38,6 @@ public class OCRWS {
 		response.setCharacterEncoding("UTF-8");
 		Integer chunk = null;
 		String tempFileName = null;
-		BufferedOutputStream outputStream = null;
 		String uploadPath = request.getSession().getServletContext().getRealPath("/");
 		System.out.println("uploadPath= " + uploadPath);
 		File up = new File(uploadPath);
@@ -44,6 +46,9 @@ public class OCRWS {
 		if (!up.exists()) {
 			up.mkdir();
 		}
+
+		OutputStream out = null;
+		InputStream in = null;
 
 		if (ServletFileUpload.isMultipartContent(request)) {
 			try {
@@ -78,6 +83,21 @@ public class OCRWS {
 				}
 
 				String message = helper.recognizeText(savedFile);
+
+				in = new WastonSpeechHelper().getVoice(message);
+
+				response.setHeader("content-disposition",
+                        "attachment; filename=result.wav");
+				response.setContentType("audio/wav");
+				out = response.getOutputStream();
+				byte[] buffer = new byte[2048];
+				int read;
+				while ((read = in.read(buffer)) != -1) {
+					out.write(buffer, 0, read);
+				}
+				
+				out.flush();
+
 				result.put("message", message);
 				result.put("result", "success");
 			} catch (FileUploadException e) {
@@ -85,11 +105,13 @@ public class OCRWS {
 				result.put("result", "Upload file failed");
 			} catch (Exception e) {
 				deleteFile(fullPath);
-				result.put("result", "Upload file failed");
+				result.put("result", "convert image to voice failed");
 			} finally {
 				try {
-					if (outputStream != null)
-						outputStream.close();
+					if (out != null)
+						out.close();
+					if (in != null);
+						in.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
