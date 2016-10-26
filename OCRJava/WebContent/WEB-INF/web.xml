@@ -15,6 +15,16 @@
 		<enabled>true</enabled>
 		<async-supported>false</async-supported>
 	</servlet>
+	<servlet> 
+        <servlet-name>UploadServlet</servlet-name> 
+        <servlet-class>com.ibm.OCR.servlet.UploadServlet</servlet-class> 
+    </servlet>      
+ 
+    <servlet-mapping> 
+        <servlet-name>UploadServlet</servlet-name> 
+        <url-pattern>/upload</url-pattern> 
+    </servlet-mapping>
+    
 	<servlet-mapping>
 		<servlet-name>JAX-RS Servlet</servlet-name>
 		<url-pattern>/ws/*</url-pattern>

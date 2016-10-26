@@ -18,3 +18,5 @@ for mac environment,  you need to install the tesseract first.
 
 # some Chinese characters cannot be well recognized due to font, need to be trained. see below doc.
 http://www.cnblogs.com/mjorcen/p/3800739.html
+
+# when run the code in liberty as a web project.  you need to download jai_imageio-1.1.jar and put it into /Library/Java/JavaVirtualMachines/jdk1.8.0_77.jdk/Contents/Home/jre/lib/ext folder.   Maybe OSGI cause the problem.

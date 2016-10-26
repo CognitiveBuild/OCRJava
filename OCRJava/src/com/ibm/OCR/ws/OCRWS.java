@@ -31,29 +31,30 @@ public class OCRWS {
 
 	@POST
 	@Path(value = "/recognize")
-	@Consumes(value = "image/*")
+	// @Consumes(value = "image/*")
 	public String recognizeText(@Context HttpServletRequest request, @Context HttpServletResponse response)
 			throws IOException {
-
+		
+		OCRHelper helper = new OCRHelper();
 		response.setCharacterEncoding("UTF-8");
 		Integer chunk = null;
-		String tempFileName = null;
+		String tempFileName = "uploadedFile.png";
 		String uploadPath = request.getSession().getServletContext().getRealPath("/");
 		System.out.println("uploadPath= " + uploadPath);
-		File up = new File(uploadPath);
+//		File up = new File(uploadPath);
+		
+//		if (!up.exists()) {
+//			up.mkdir();
+//		}
 		String fullPath = null;
 		Map<String, String> result = new HashMap<String, String>();
-		if (!up.exists()) {
-			up.mkdir();
-		}
-
 		OutputStream out = null;
 		InputStream in = null;
 
 		if (ServletFileUpload.isMultipartContent(request)) {
 			try {
 				DiskFileItemFactory factory = new DiskFileItemFactory();
-				factory.setSizeThreshold(2048);
+				factory.setSizeThreshold(1024 * 1024 * 2);
 				ServletFileUpload upload = new ServletFileUpload(factory);
 				upload.setHeaderEncoding("UTF-8");
 				upload.setSizeMax(10 * 1024 * 1024);
@@ -62,44 +63,55 @@ public class OCRWS {
 				File savedFile = null;
 				for (FileItem item : items) {
 					if (item.isFormField()) {
-						if (item.getFieldName().equals("name")) {
-							tempFileName = item.getString();
-
-						} else if (item.getFieldName().equals("chunk")) {
-							chunk = Integer.parseInt(item.getString());
-
-						}
+						// leave it for more form attribute. 
 					} else {
-						if (tempFileName != null) {
-							// fileName = item.getName();
-							String chunkName = tempFileName;
-							if (chunk != null) {
-								chunkName = chunk + "_" + tempFileName;
-							}
-							savedFile = new File(uploadPath, chunkName);
-							item.write(savedFile);
-						}
+						System.out.println("name -->"+item.getName());
+//						if (tempFileName != null) {
+//							// fileName = item.getName();
+//							String chunkName = tempFileName;
+//							if (chunk != null) {
+//								chunkName = chunk + "_" + tempFileName;
+//							}
+//							savedFile = new File(uploadPath, chunkName);
+//							System.out.println("savedFile -->"+savedFile);
+//							item.write(savedFile);
+//						}
+						savedFile = new File(uploadPath, item.getName());
+						System.out.println("savedFile -->"+savedFile);
+						item.write(savedFile);
+						
+						 ClassLoader classLoader = this.getClass().getClassLoader();  
+					     String path = classLoader.getResource("").getPath(); 
+					     System.out.println("path-->"+path);
 					}
 				}
+				if (savedFile != null) {
+					String message = helper.recognizeText(savedFile,uploadPath);
 
-				String message = helper.recognizeText(savedFile);
+					if (message != null) {
 
-				in = new WastonSpeechHelper().getVoice(message);
+						System.out.println("message-->" + message);
 
-				response.setHeader("content-disposition",
-                        "attachment; filename=result.wav");
-				response.setContentType("audio/wav");
-				out = response.getOutputStream();
-				byte[] buffer = new byte[2048];
-				int read;
-				while ((read = in.read(buffer)) != -1) {
-					out.write(buffer, 0, read);
+						in = new WastonSpeechHelper().getVoice(message);
+
+						response.setHeader("content-disposition", "attachment; filename=result.wav");
+						response.setContentType("audio/wav");
+						out = response.getOutputStream();
+						byte[] buffer = new byte[2048];
+						int read;
+						while ((read = in.read(buffer)) != -1) {
+							out.write(buffer, 0, read);
+						}
+
+						out.flush();
+
+						result.put("message", message);
+						result.put("result", "success");
+					} else {
+						result.put("message", message);
+						result.put("result", "fail");
+					}
 				}
-				
-				out.flush();
-
-				result.put("message", message);
-				result.put("result", "success");
 			} catch (FileUploadException e) {
 				deleteFile(fullPath);
 				result.put("result", "Upload file failed");
@@ -108,15 +120,18 @@ public class OCRWS {
 				result.put("result", "convert image to voice failed");
 			} finally {
 				try {
-					if (out != null)
+					if (out != null) {
 						out.close();
-					if (in != null);
+					}
+					if (in != null) {
 						in.close();
+					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
 		}
+
 		return JSON.toJSONString(result);
 	}
 

@@ -16,7 +16,8 @@ public class OCRTest {
 	@Test
 	public void testRecognizeText() {
 		String filePath = "/Users/freddy/Documents/aa.png";
-		new OCRHelper().recognizeText(new File(filePath));
+		String buildPath = this.getClass().getClassLoader().getResource("").getPath();
+		new OCRHelper().recognizeText(new File(filePath),buildPath.substring(0, buildPath.indexOf("/WEB-INF/classes/")));
 	}
 
 	@Test

@@ -1,5 +1,172 @@
-<!DOCTYPE html>
-<form action="/OCRJava/ws/secure/ocr/recognize" method="post" enctype="multipart/form-data">
-<input type="file" />
-<input type="submit" />
+<!DOCTYPE>
+<html>
+<!-- 
+<script type="javascript">
+
+$("#submitBtn").click(function() {
+ 
+      $.ajax({
+                        type: "POST", //访问WebService使用Post方式请求
+                        contentType: "application/json;charset=utf-8", //WebService 会返回Json类型
+                        url: "/API/Service/UserValidate.asmx/UserLogin", //调用WebService
+                        data: "{userName:'" + username + "',userPwd:'" + userpwd + "'}", //Email参数
+                        dataType: 'json',
+                        beforeSend: function(x) { x.setRequestHeader("Content-Type", "application/json; charset=utf-8"); },
+                        error: function(x, e) {
+                        },
+                        success: function(result) { //回调函数，result，返回值
+                            $("#userloging").hide();
+                            var json = eval('(' + result.d + ')');
+                            var userid = json.user.id;
+                            if (userid > 0) {
+                                $("#spanusername").html(json.user.name);
+                                $("#spanmessagenum").html(json.user.message);
+                                $("#userloginsucced").show();
+                                $("#userloginbox").hide();
+                            }
+                            else {
+                                switch (userid) {
+                                    case -2:
+                                        alert("用户被锁定！请30分钟后再登录！");
+                                        $("#username").focus();
+                                        break;
+                                    case -1:
+                                        alert("用户名或密码错误！请核对您的用户名和密码！");
+                                        $("#userpassword").focus();
+                                        break;
+                                    default:
+                                        alert("登录失败！请核对您的用户名和密码之后重试！");
+                                        $("#userpassword").focus();
+                                        break;
+                                }
+                            }
+                        }
+                    });
+
+               
+                var username = $("#username").val();
+                var userpwd = $("#userpassword").val();
+                if (username != "" && userpwd != "") {
+                    $("#userloging").show();
+                    $.ajax({
+                        type: "POST", //访问WebService使用Post方式请求
+                        contentType: "application/json;charset=utf-8", //WebService 会返回Json类型
+                        url: "/API/Service/UserValidate.asmx/UserLogin", //调用WebService
+                        data: "{userName:'" + username + "',userPwd:'" + userpwd + "'}", //Email参数
+                        dataType: 'json',
+                        beforeSend: function(x) { x.setRequestHeader("Content-Type", "application/json; charset=utf-8"); },
+                        error: function(x, e) {
+                        },
+                        success: function(result) { //回调函数，result，返回值
+                            $("#userloging").hide();
+                            var json = eval('(' + result.d + ')');
+                            var userid = json.user.id;
+                            if (userid > 0) {
+                                $("#spanusername").html(json.user.name);
+                                $("#spanmessagenum").html(json.user.message);
+                                $("#userloginsucced").show();
+                                $("#userloginbox").hide();
+                            }
+                            else {
+                                switch (userid) {
+                                    case -2:
+                                        alert("用户被锁定！请30分钟后再登录！");
+                                        $("#username").focus();
+                                        break;
+                                    case -1:
+                                        alert("用户名或密码错误！请核对您的用户名和密码！");
+                                        $("#userpassword").focus();
+                                        break;
+                                    default:
+                                        alert("登录失败！请核对您的用户名和密码之后重试！");
+                                        $("#userpassword").focus();
+                                        break;
+                                }
+                            }
+                        }
+                    });
+                }
+                else if (username == "") {
+                    alert("用户名不能为空！");
+                    $("#username").focus();
+                }
+                else if (userpwd == "") {
+                    alert("密码不能为空！");
+                    $("#userpassword").focus();
+                }
+            });
+
+
+function initUpload(){
+    	var t;
+    	var uploader1 = new plupload.Uploader({
+			runtimes : 'html5,flash,silverlight,html4',
+			browse_button : 'upload_file_btn', 
+			container: document.getElementById('container'), 
+			url : '/ioccFleet/ws/uploadExcel/'+window.localStorage.getItem("email"),
+			flash_swf_url : '/ioccFleet/js/Moxie.swf',
+			silverlight_xap_url : '/ioccFleet/js/Moxie.xap',
+			
+			filters : {
+				max_file_size : '10mb',
+				mime_types: [
+					{title : "Excel files", extensions : "xls,xlsx"}
+				]
+			},
+		
+			init: {		
+				PostInit: function() {
+					$('#upload').click(function() {
+					try {
+						uploader1.start();
+					}catch (e) {
+						alert('Upload failed. Please check the file');
+					}
+				});
+				},
+					
+				FilesAdded: function(up, files) {
+					$('#fileInput').hide();
+					plupload.each(files, function(file) {
+							$('#process_msg').html(file.name);
+						});									
+				},
+								
+				FileUploaded:function(up,file,obj){
+					var data;
+					try{
+						data = eval(obj.response);
+					}catch(err){
+						data = eval('('+obj.response+')');
+					}
+					
+					if(data.result == "success"){
+						$('#process_msg').html('Data uploaded successfully.');
+						t= setTimeout(function(){
+							$('#process_msg').html("");
+							clearTimeout(t); 
+						},5000);						 
+					}else{
+						alert(data.result + '. Please check uploaded file and try again.');					
+					}
+				},
+		
+				UploadProgress: function(up, file) {
+				},
+		
+				Error: function(up, err) {
+					alert(err);
+				}
+			}
+		})
+		
+		uploader1.init();
+
+    }
+
+</script> -->
+<form action="upload" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" />
+    <input type="submit" />
 </form>
+</html>
