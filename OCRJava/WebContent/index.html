@@ -1,7 +1,168 @@
 <!DOCTYPE>
 <html>
-<form action="upload" method="post" enctype="multipart/form-data">
-    <input type="file" name="file" />
-    <input type="submit" />
-</form>
+<head>
+<title>Image-to-Speech</title>
+
+	<style type="text/css">
+		body{
+			margin: 0px;
+			padding: 0px;
+			font-family: "Helvetica Neue",Helvetica,Arial,"sans-serif";
+			overflow: hidden;
+			position: relative;
+		}
+		.container{
+			padding: 25% 20px 20%;
+		}
+		@media (orientation: landscape) { 
+			.container{
+				padding: 15% 20px 10%;
+			}
+		}
+		h2{
+			text-align: center;
+			font-size: 22px;
+			font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+			border-bottom: 1px solid #ddd;
+			padding: 20px 0px;
+			margin: 0px;
+			position: fixed;
+			top: 0px;
+			left: 0px;
+			width: 100%;
+			z-index: 1;
+			background: #fff;
+			box-shadow: 0px 1px 5px #ddd;
+		}
+		a{
+			display: block;
+			font-size: 18px;
+			text-align: center;
+			padding: 10px 20px;
+			border: 1px solid #ccc;
+			text-decoration: none;
+			color: #fff;
+			background: #5DA027;
+		}
+		a.primary{
+			/* padding: 20px 20px; */
+		}
+		a.secondary{
+			background: #aa0000;
+		}
+		.description{
+			text-align: center;
+			margin: 20px auto;
+			display: block;
+		}
+		.clock{
+			text-align: center;
+			color:#cc0000;
+			font-size:90%;
+		}
+		.footer{
+			text-align: center;
+		}
+		.highlight{ 
+			display:block; 
+			font-weight:bold; 
+			color:#0000ee; 
+			padding:4px;
+			text-align: center; 
+			margin: 20px auto;
+		}
+
+		.ui-file-container{
+			width: 30%;
+			min-width: 200px;
+			display:block;
+			margin: 0px auto;
+			position: relative;
+			height: 30px;
+			line-height: 30px;
+			border: 1px solid #ddd;
+		}
+	
+			.ui-file-container .ui-file-button, 
+			.ui-file-container input{
+				width: 100%;
+				position:absolute;
+				left: 0px;
+				top: 0px;
+				display:block;
+				height: 30px;
+				line-height: 30px;
+				cursor: pointer;
+			}
+			.ui-file-container .ui-file-button{
+				
+			}
+			.ui-file-container input{
+				visiblity: hidden;
+				opacity:0;
+			}
+			audio{
+				width: 100%;
+			}
+	</style>
+
+</head>
+
+<body>
+	<h2>Image-to-Speech</h2>
+	<div class="container">
+		<div class="description">
+			<div class="ui-file-wrapper">
+				<div class="ui-file-container">
+					<div class="ui-file-button">choose a file</div>
+					<input type="file" name="file" class="ui-file" />
+				</div>
+			</div>
+		</div>
+		
+		<div class="highlight">then press recognize button</div>
+	
+	    <a href="#" class="ui-submit">recognize</a>
+
+		<p class="footer">
+			<audio class="ui-audio" controls autoplay></audio>
+		</p>
+	</div>
+	<script src="js/jquery-3.1.1.min.js"></script>
+	<script>
+
+	(function($){
+
+		$('.ui-file').on('change', function(evt){
+			$('.highlight').html($(this).val());
+		});
+		$('.ui-submit').on('click', function(evt){
+			$('.highlight').html('<img src="images/loading.gif" width="60" height="60" />');
+			var data = new FormData();
+			var fileInputs = $('.ui-file');
+			fileInputs.on('change', function(evt){
+				console.log($(this).val());
+			});
+
+			$.each(fileInputs[0].files, function(i, file) {
+			    data.append('file-'+i, file);
+			});
+			
+			$.ajax({
+		    	url: 'upload',
+			    data: data,
+			    cache: false,
+			    contentType: false,
+			    processData: false,
+			    type: 'POST',
+			    success: function(data){
+			        $('.ui-audio').attr('src', 'data:audio/x-wav;base64,'+data);
+			        $('.highlight').html('please listen...');
+			    }
+			});
+		});
+	})(jQuery);
+
+	</script>
+</body>
 </html>

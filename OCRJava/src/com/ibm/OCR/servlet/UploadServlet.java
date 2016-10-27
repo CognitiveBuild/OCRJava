@@ -18,10 +18,12 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.IOUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.ibm.OCR.OCRHelper;
 import com.ibm.waston.WastonSpeechHelper;
+import com.sun.org.apache.xml.internal.security.utils.Base64;
 
 public class UploadServlet extends HttpServlet {
 
@@ -50,7 +52,8 @@ public class UploadServlet extends HttpServlet {
 		Map<String, String> result = new HashMap<String, String>();
 		OutputStream out = null;
 		InputStream in = null;
-
+System.out.println(ServletFileUpload.isMultipartContent(request));
+System.out.println(request.getContentLength());
 		if (ServletFileUpload.isMultipartContent(request)) {
 			try {
 				DiskFileItemFactory factory = new DiskFileItemFactory();
@@ -90,20 +93,29 @@ public class UploadServlet extends HttpServlet {
 
 					if (message != null) {
 
+						
+						message = message.replace("\n", "");
+						message = message.replace("\r", "");
+						message = message.replace("，", ", ");
 						System.out.println("message-->" + message);
-
+						
 						in = new WastonSpeechHelper().getVoice(message);
 
 						response.setHeader("content-disposition", "attachment; filename=result.wav");
 						response.setContentType("audio/wav");
 						out = response.getOutputStream();
-						byte[] buffer = new byte[2048];
-						int read;
-						while ((read = in.read(buffer)) != -1) {
-							out.write(buffer, 0, read);
-						}
-
+//						byte[] buffer = new byte[2048];
+//						int read;
+//						while ((read = in.read(buffer)) != -1) {
+//							out.write(buffer, 0, read);
+//						}
+						byte[] bytes = IOUtils.toByteArray(in);
+						String base64String = Base64.encode(bytes);
+						System.out.println(base64String);
+						out.write(base64String.getBytes());
+						
 						out.flush();
+						
 
 						result.put("message", message);
 						result.put("result", "success");
