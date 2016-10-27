@@ -1,22 +1,24 @@
-# OCRJava
+#OCRJava
+
 Optical Character Recognition Service. This is the project for Innovation Day practice as well as an important assets of Bluemix and Cognitive CoEs.
+
+###Installation guide
+
+- For macOS users, please install the `tesseract` first.
+  
+* Grant authority for the folder by changing owner or grant 766 in case you don't have the access
+  `sudo chown -R $USER /usr/local`
+
+* Install Xcode on the macOS, because `tesseract` needs to be compiled as it only provide the source code
+
+* Install the tesseract
+  `brew install tesseract`
+
+* Some Chinese characters cannot be well recognized due to the font issue, so the `tesseract` need to be trained, please check the reference below (Chinese version)
+  http://www.cnblogs.com/mjorcen/p/3800739.html
+
+- When run the code in liberty as a web project.  you need to download jai_imageio-1.1.jar and put it into /Library/Java/JavaVirtualMachines/jdk1.8.0_77.jdk/Contents/Home/jre/lib/ext folder.   Maybe OSGI cause the problem.
+
 
 #License
 Copyright 2016 GCG GBS CTO Office under [the Apache 2.0 license](LICENSE).
-
-
-for mac environment,  you need to install the tesseract first.
-
-#grant authority for the folder by changing owner. or grant 766
-1. sudo chown -R $USER /usr/local
-
-# if you don't have xcode, you need to install.  because, tesseract only provide source code. need xcode to compile
-2. install xcode
-
-#  install the tesseract
-3. brew install tesseract
-
-# some Chinese characters cannot be well recognized due to font, need to be trained. see below doc.
-http://www.cnblogs.com/mjorcen/p/3800739.html
-
-# when run the code in liberty as a web project.  you need to download jai_imageio-1.1.jar and put it into /Library/Java/JavaVirtualMachines/jdk1.8.0_77.jdk/Contents/Home/jre/lib/ext folder.   Maybe OSGI cause the problem.
