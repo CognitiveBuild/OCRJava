@@ -4,15 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletException;
-import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
@@ -20,8 +18,8 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
 
-import com.alibaba.fastjson.JSON;
 import com.ibm.OCR.OCRHelper;
+import com.ibm.json.java.JSONObject;
 import com.ibm.waston.WastonSpeechHelper;
 import com.sun.org.apache.xml.internal.security.utils.Base64;
 
@@ -33,10 +31,16 @@ public class UploadServlet extends HttpServlet {
 	//
 	// }
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		// super.doPost(req, resp);
+		String format = request.getParameter("format");
 		OCRHelper helper = new OCRHelper();
 		response.setCharacterEncoding("UTF-8");
 		Integer chunk = null;
@@ -49,11 +53,14 @@ public class UploadServlet extends HttpServlet {
 //			up.mkdir();
 //		}
 		String fullPath = null;
-		Map<String, String> result = new HashMap<String, String>();
+//		Map<String, String> result = new HashMap<String, String>();
+		JSONObject result = new JSONObject();
 		OutputStream out = null;
 		InputStream in = null;
-System.out.println(ServletFileUpload.isMultipartContent(request));
-System.out.println(request.getContentLength());
+
+		System.out.println(ServletFileUpload.isMultipartContent(request));
+		System.out.println(request.getContentLength());
+
 		if (ServletFileUpload.isMultipartContent(request)) {
 			try {
 				DiskFileItemFactory factory = new DiskFileItemFactory();
@@ -92,44 +99,52 @@ System.out.println(request.getContentLength());
 					String message = helper.recognizeText(savedFile,uploadPath);
 
 					if (message != null) {
-
 						
 						message = message.replace("\n", "");
 						message = message.replace("\r", "");
 						message = message.replace("，", ", ");
+						message = message.replace("。", ". ");
+
 						System.out.println("message-->" + message);
 						
 						in = new WastonSpeechHelper().getVoice(message);
-
-						response.setHeader("content-disposition", "attachment; filename=result.wav");
-						response.setContentType("audio/wav");
 						out = response.getOutputStream();
-//						byte[] buffer = new byte[2048];
-//						int read;
-//						while ((read = in.read(buffer)) != -1) {
-//							out.write(buffer, 0, read);
-//						}
-						byte[] bytes = IOUtils.toByteArray(in);
-						String base64String = Base64.encode(bytes);
-						System.out.println(base64String);
-						out.write(base64String.getBytes());
-						
-						out.flush();
-						
 
-						result.put("message", message);
-						result.put("result", "success");
+						if(format.equals("binary")){
+							response.setHeader("content-disposition", "attachment; filename=result.wav");
+							response.setContentType("audio/wav");
+							System.out.println("Data only");
+							byte[] buffer = new byte[2048];
+							int read;
+							while ((read = in.read(buffer)) != -1) {
+								out.write(buffer, 0, read);
+							}
+						}
+						else {
+							response.setContentType(MediaType.APPLICATION_JSON);
+							System.out.println("JSON format");
+							byte[] bytes = IOUtils.toByteArray(in);
+							String base64String = Base64.encode(bytes);
+							result.put("message", base64String);
+							result.put("result", "success");
+							out.write(result.toString().getBytes());
+						}
+
+						out.flush();
+
+//						result.put("message", message);
+//						result.put("result", "success");
 					} else {
-						result.put("message", message);
-						result.put("result", "fail");
+//						result.put("message", message);
+//						result.put("result", "fail");
 					}
 				}
 			} catch (FileUploadException e) {
 				deleteFile(fullPath);
-				result.put("result", "Upload file failed");
+//				result.put("result", "Upload file failed");
 			} catch (Exception e) {
 				deleteFile(fullPath);
-				result.put("result", "convert image to voice failed");
+//				result.put("result", "convert image to voice failed");
 			} finally {
 				try {
 					if (out != null) {

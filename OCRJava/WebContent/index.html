@@ -1,6 +1,7 @@
 <!DOCTYPE>
 <html>
 <head>
+<meta name="viewport" content="initial-scale=1, minimum-scale=1, user-scalable=no" />
 <title>Image-to-Speech</title>
 
 	<style type="text/css">
@@ -12,11 +13,11 @@
 			position: relative;
 		}
 		.container{
-			padding: 25% 20px 20%;
+			padding: 20% 20px 20%;
 		}
 		@media (orientation: landscape) { 
 			.container{
-				padding: 15% 20px 10%;
+				padding: 10% 20px 10%;
 			}
 		}
 		h2{
@@ -36,7 +37,7 @@
 		}
 		a{
 			display: block;
-			font-size: 18px;
+			font-size: 22px;
 			text-align: center;
 			padding: 10px 20px;
 			border: 1px solid #ccc;
@@ -70,6 +71,8 @@
 			padding:4px;
 			text-align: center; 
 			margin: 20px auto;
+			height: 80px;
+			line-height: 80px;
 		}
 
 		.ui-file-container{
@@ -133,30 +136,34 @@
 
 	(function($){
 
+		var userAgent = window.navigator.userAgent;
+		var isMobileWeb = false;
+		if((userAgent.indexOf('iPhone') != -1 || userAgent.indexOf('Android') != -1) && userAgent.indexOf('Mobile') != -1) {
+			isMobileWeb = true;
+		}
+
 		$('.ui-file').on('change', function(evt){
 			$('.highlight').html($(this).val());
 		});
+
 		$('.ui-submit').on('click', function(evt){
 			$('.highlight').html('<img src="images/loading.gif" width="60" height="60" />');
 			var data = new FormData();
 			var fileInputs = $('.ui-file');
-			fileInputs.on('change', function(evt){
-				console.log($(this).val());
-			});
-
+			
 			$.each(fileInputs[0].files, function(i, file) {
 			    data.append('file-'+i, file);
 			});
-			
+
 			$.ajax({
-		    	url: 'upload',
+		    	url: 'upload?format=json',
 			    data: data,
 			    cache: false,
 			    contentType: false,
 			    processData: false,
 			    type: 'POST',
 			    success: function(data){
-			        $('.ui-audio').attr('src', 'data:audio/x-wav;base64,'+data);
+			        $('.ui-audio').attr('src', 'data:audio/x-wav;base64,'+data.message);
 			        $('.highlight').html('please listen...');
 			    }
 			});
