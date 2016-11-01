@@ -27,9 +27,16 @@ public class OCRTest {
 
 	@Test
 	public void testTextToSpeech() {
-		InputStream in = new WastonSpeechHelper().getVoice("This is a bluemix innovation day testing");
-		inputstreamtofile(in, new File("/Users/freddy/Documents/test.wav"));
-		System.out.println("done");
+		InputStream in;
+		try {
+			in = new WastonSpeechHelper().getVoice("This is a bluemix innovation day testing");
+			inputstreamtofile(in, new File("/Users/freddy/Documents/test.wav"));
+			System.out.println("done");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("fail");
+		}
 	}
 
 	public void inputstreamtofile(InputStream ins, File file) {

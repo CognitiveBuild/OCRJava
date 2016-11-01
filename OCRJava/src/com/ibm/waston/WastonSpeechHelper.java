@@ -9,10 +9,17 @@ import com.ibm.watson.developer_cloud.text_to_speech.v1.model.Voice;
 
 public class WastonSpeechHelper {
 	private static final String END_POINT_URL = "https://stream.watsonplatform.net/text-to-speech/api";
-	private static final String TEXT_TO_SPEECH_USERNAME = "9995badf-ef87-4c2c-aead-f390cfab0c8c";
-	private static final String TEXT_TO_SPEECH_PASSWORD = "vB3teldViUVX";
+	
+	/**
+	 * TODO: Obtain your credentials from Bluemix
+	 */
+	private static final String TEXT_TO_SPEECH_USERNAME = "";
+	private static final String TEXT_TO_SPEECH_PASSWORD = "";
 
-	public InputStream getVoice(String message) {
+	public InputStream getVoice(String message) throws Exception {
+		if(TEXT_TO_SPEECH_USERNAME.isEmpty() || TEXT_TO_SPEECH_PASSWORD.isEmpty()){
+			throw new Exception("Obtain your credentials from Bluemix");
+		}
 		TextToSpeech service = new TextToSpeech(TEXT_TO_SPEECH_USERNAME, TEXT_TO_SPEECH_PASSWORD);
 		service.setEndPoint(END_POINT_URL);
 
