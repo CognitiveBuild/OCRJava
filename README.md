@@ -17,8 +17,9 @@ Optical Character Recognition Service. This is the project for Innovation Day pr
 * Some Chinese characters cannot be well recognized due to the font issue, so the `tesseract` need to be trained, please check the reference below (Chinese version)
   http://www.cnblogs.com/mjorcen/p/3800739.html
 
-- When run the code in liberty as a web project.  you need to download jai_imageio-1.1.jar and put it into /Library/Java/JavaVirtualMachines/jdk1.8.0_77.jdk/Contents/Home/jre/lib/ext folder.   Maybe OSGI cause the problem.
+- When run the code in liberty as a web project.  you need to download jai_imageio-1.1.jar and put it into /Library/Java/JavaVirtualMachines/jdk1.8.0_77.jdk/Contents/Home/jre/lib/ext folder. Maybe OSGI cause the problem.
 
+- Add Text-to-Speech credentials in the code file: `/OCRJava/src/com/ibm/waston/WastonSpeechHelper.java`, obtain the credentials from Bluemix
 
 #License
 Copyright 2016 GCG GBS CTO Office under [the Apache 2.0 license](LICENSE).
