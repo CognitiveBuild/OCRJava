@@ -11,6 +11,11 @@ import org.junit.Test;
 
 import com.ibm.OCR.OCRHelper;
 import com.ibm.waston.WastonSpeechHelper;
+import com.ibm.watson.developer_cloud.visual_recognition.v3.VisualRecognition;
+import com.ibm.watson.developer_cloud.visual_recognition.v3.model.ClassifyImagesOptions;
+import com.ibm.watson.developer_cloud.visual_recognition.v3.model.RecognizedText;
+import com.ibm.watson.developer_cloud.visual_recognition.v3.model.VisualClassification;
+import com.ibm.watson.developer_cloud.visual_recognition.v3.model.VisualRecognitionOptions;
 
 public class OCRTest {
 	@Test
@@ -54,5 +59,28 @@ public class OCRTest {
 			}
 		}
 
+	}
+	
+	@Test
+	public void testVisualRecogintion(){
+		
+		VisualRecognition service = new VisualRecognition(VisualRecognition.VERSION_DATE_2016_05_20);
+		service.setApiKey("44c703d3d2488f684473e57d162b8c94e128e633");
+		service.setEndPoint("https://gateway-a.watsonplatform.net/visual-recognition/api");
+
+		System.out.println("Classify an image");
+		ClassifyImagesOptions options = new ClassifyImagesOptions.Builder()
+		    .images(new File("/Users/freddy/Documents/bb.png"))
+		    .build();
+		
+		VisualClassification result = service.classify(options).execute();
+		
+		System.out.println(result);
+		
+		VisualRecognitionOptions options1 = new VisualRecognitionOptions.Builder().images(new File("/Users/freddy/Documents/bb1.png"))
+		    .build();
+		RecognizedText rt = service.recognizeText(options1).execute();
+		
+		System.out.println(rt);
 	}
 }
