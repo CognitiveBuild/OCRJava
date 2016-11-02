@@ -35,7 +35,7 @@ Optical Character Recognition Service. This is the project for Innovation Day pr
 ```shell
 	git clone git@github.com:CognitiveBuild/OCRJava.git
 ```
-- When run the code in liberty as a web project.  you need to download jai_imageio-1.1.jar and put it into /Library/Java/JavaVirtualMachines/jdk1.8.0_77.jdk/Contents/Home/jre/lib/ext folder. Maybe OSGI cause the problem
+- When run the code in liberty as a web project.  you need to download jai_imageio-1.1.jar and put it into `/Library/Java/JavaVirtualMachines/jdk{version}.jdk/Contents/Home/jre/lib/ext` folder. Maybe OSGI cause the problem
 - Add `Text-to-Speech` credentials in the code file: `/OCRJava/src/com/ibm/waston/WastonSpeechHelper.java`, obtain the credentials from [Bluemix](https://bluemix.net/) account
 ```java
 	private static final String TEXT_TO_SPEECH_USERNAME = "your_username";
