@@ -9,14 +9,10 @@ Optical Character Recognition Service. This is the project for Innovation Day pr
 * Register your [Bluemix](https://console.ng.bluemix.net/) account
 * Create `Java Liberty Runtime`
 * Connect Java Liberty Runtime with `Text to Speech` service
-* Install Bluemix and CF CLI
-* Install Xcode (macOS only) 
-* Install the `tesseract`
-```shell
-	brew install tesseract`
-```
-* Install **Eclipse Java EE IDE for Web Developers** as your IDE
-* Setup `Websphere Application Server Liberty Profile` or `Tomcat` in the **Eclipse** for debugging purpose
+* Install [Bluemix](http://clis.ng.bluemix.net/ui/home.html) and [CF CLI](https://github.com/cloudfoundry/cli/releases)
+* Install Xcode (macOS only)
+* Install **Eclipse Java EE IDE for Web Developers** as your IDE ([Download](http://eclipse.bluemix.net/packages/neon.1/))
+* Setup [Websphere Application Server Liberty Profile](https://developer.ibm.com/wasdev/downloads/liberty-profile-using-non-eclipse-environments/) or [Tomcat](http://tomcat.apache.org/) in the **Eclipse** for debugging purpose
 
 #Installation guide
 
@@ -25,13 +21,16 @@ Optical Character Recognition Service. This is the project for Innovation Day pr
 	/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
 * Install the `tesseract`
+```shell
+	brew install tesseract`
+```
 * Grant authority for the folder by changing owner or grant 766 in case you don't have the access
 ```shell
 	sudo chown -R $USER /usr/local
 ```
 * Install Xcode (macOS only), because `tesseract` needs to be compiled as it only provide the source code
 * Some Chinese characters cannot be well recognized due to the font issue, so the `tesseract` need to be trained, please check the reference below (Chinese version) http://www.cnblogs.com/mjorcen/p/3800739.html
-* Run git command to clone the sample code
+* Run git command or download the [source code here](https://github.com/CognitiveBuild/OCRJava/archive/master.zip)
 ```shell
 	git clone git@github.com:CognitiveBuild/OCRJava.git
 ```
