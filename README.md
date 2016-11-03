@@ -7,8 +7,7 @@ Optical Character Recognition Service. This is the project for Innovation Day pr
 
 #Prerequisite
 * Register your [Bluemix](https://console.ng.bluemix.net/) account
-* Create `Java Liberty Runtime`
-* Connect Java Liberty Runtime with `Text to Speech` service
+* Create `Text to Speech` service
 * Install [Bluemix](http://clis.ng.bluemix.net/ui/home.html) and [CF CLI](https://github.com/cloudfoundry/cli/releases)
 * Install Xcode (macOS only)
 * Install **Eclipse Java EE IDE for Web Developers** as your IDE ([Download](http://eclipse.bluemix.net/packages/neon.1/))
