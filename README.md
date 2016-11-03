@@ -11,7 +11,7 @@ Optical Character Recognition Service. This is the project for Innovation Day pr
 * Install [Bluemix](http://clis.ng.bluemix.net/ui/home.html) and [CF CLI](https://github.com/cloudfoundry/cli/releases)
 * Install Xcode (macOS only)
 * Install **Eclipse Java EE IDE for Web Developers** as your IDE ([Download](http://eclipse.bluemix.net/packages/neon.1/))
-* Setup [Websphere Application Server Liberty Profile](https://developer.ibm.com/wasdev/downloads/liberty-profile-using-non-eclipse-environments/) or [Tomcat](http://tomcat.apache.org/) in the **Eclipse** for debugging purpose
+* Setup [Websphere Application Server Liberty Profile](https://developer.ibm.com/wasdev/downloads/liberty-profile-using-non-eclipse-environments/) or [Tomcat](http://tomcat.apache.org/) in the **Eclipse** for debugging purpose. [Drag and drop this link](http://marketplace.eclipse.org/marketplace-client-intro?mpc_install=1778478) into the Eclipse if you are installing `Websphere Application Server Liberty Profile`.
 
 #Installation guide
 
