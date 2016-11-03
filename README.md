@@ -1,5 +1,5 @@
 #OCRJava
-Optical Character Recognition Service. This is the project for Innovation Day practice as well as an important assets of Bluemix and Cognitive CoEs.
+Optical Character Recognition Service. This is the project for Innovation Day practice, also an important asset of Bluemix and Cognitive CoEs.
 
 [![Language: Java](https://img.shields.io/badge/language-java-black.svg?style=flat)](https://github.com/CognitiveBuild/OCRJava)
 [![Watson: Text-to-Speech](https://img.shields.io/badge/watson-text--to--speech-994fd7.svg?style=flat)](https://github.com/CognitiveBuild/OCRJava)
@@ -20,9 +20,12 @@ Optical Character Recognition Service. This is the project for Innovation Day pr
 	/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
 * Install the `tesseract`
-```shell
-	brew install tesseract`
-```
+	- Windows
+	Download [Windows Installer here (tesseract-ocr-setup-3.02.02.exe)](https://sourceforge.net/projects/tesseract-ocr-alt/files/)
+	- macOS
+	```shell
+		brew install tesseract`
+	```
 * Grant authority for the folder by changing owner or grant 766 in case you don't have the access
 ```shell
 	sudo chown -R $USER /usr/local
